@@ -1,0 +1,169 @@
+---
+test_name: Успешное создание клиентов
+stages:
+  - name: Создание клиентов
+    request:
+      url: "{ad_engine_url}/client/bulk"
+      method: POST
+      json:
+        - client_id: "00000000-0000-0000-0000-000000000016"
+          login: "user1"
+          location: "Moscow"
+          gender: "MALE"
+          age: 25
+        - client_id: "00000000-0000-0000-0000-000000000017"
+          login: "user2"
+          location: "St. Petersburg"
+          gender: "FEMALE"
+          age: 30
+    response:
+      status_code: 201
+
+---
+test_name: Пересоздание клиента (обновление существующего клиента)
+stages:
+  - name: Создание клиента
+    request:
+      url: "{ad_engine_url}/client/bulk"
+      method: POST
+      json:
+        - client_id: "00000000-0000-0000-0000-000000000026"
+          login: "user3"
+          location: "Moscow"
+          gender: "MALE"
+          age: 25
+    response:
+      status_code: 201
+      json:
+        - client_id: "00000000-0000-0000-0000-000000000026"
+          login: "user3"
+          location: "Moscow"
+          gender: "MALE"
+          age: 25
+
+  - name: Обновление клиента
+    request:
+      url: "{ad_engine_url}/client/bulk"
+      method: POST
+      json:
+        - client_id: "00000000-0000-0000-0000-000000000026"
+          login: "user4"
+          location: "St. Petersburg"
+          gender: "FEMALE"
+          age: 30
+    response:
+      status_code: 201
+      json:
+        - client_id: "00000000-0000-0000-0000-000000000026"
+          login: "user4"
+          location: "St. Petersburg"
+          gender: "FEMALE"
+          age: 30
+
+---
+test_name: Попытка создания клиента с некорректным UUID
+stages:
+  - name: Попытка создания клиента с некорректным UUID
+    request:
+      url: "{ad_engine_url}/client/bulk"
+      method: POST
+      json:
+        - client_id: "invalid-uuid"
+          login: "user6"
+          location: "Moscow"
+          gender: "MALE"
+          age: 25
+    response:
+      status_code: 409
+
+---
+test_name: Попытка создания клиента с некорректным возрастом
+stages:
+  - name: Попытка создания клиента с некорректным возрастом
+    request:
+      url: "{ad_engine_url}/client/bulk"
+      method: POST
+      json:
+        - client_id: "00000000-0000-0000-0000-000000000020"
+          login: "user7"
+          location: "Moscow"
+          gender: "MALE"
+          age: 200
+    response:
+      status_code: 400
+
+---
+test_name: Получение клиента по ID
+stages:
+  - name: Получение клиента по ID
+    request:
+      url: "{ad_engine_url}/client/00000000-0000-0000-0000-000000000016"
+      method: GET
+    response:
+      status_code: 200
+      json:
+        client_id: "00000000-0000-0000-0000-000000000016"
+        login: "user1"
+        location: "Moscow"
+        gender: "MALE"
+        age: 25
+
+---
+test_name: Попытка получения несуществующего клиента
+stages:
+  - name: Попытка получения несуществующего клиента
+    request:
+      url: "{ad_engine_url}/client/00000000-0000-0000-0000-000000000000"
+      method: GET
+    response:
+      status_code: 404
+
+---
+test_name: Попытка получения клиента с некорректным UUID
+stages:
+  - name: Попытка получения клиента с некорректным UUID
+    request:
+      url: "{ad_engine_url}/client/invalid-uuid"
+      method: GET
+    response:
+      status_code: 404
+ 
+
+---
+test_name: Пустой список клиентов
+stages:
+  - name: Попытка создания пустого списка клиентов
+    request:
+      url: "{ad_engine_url}/client/bulk"
+      method: POST
+      json: []
+    response:
+      status_code: 201
+      json: []
+
+---
+test_name: Дублирование клиентов в запросе
+stages:
+  - name: Попытка создания клиентов с дублирующимися ID
+    request:
+      url: "{ad_engine_url}/client/bulk"
+      method: POST
+      json:
+        - client_id: "00000000-0000-0000-0000-000000000026"
+          login: "user8"
+          location: "Moscow"
+          gender: "MALE"
+          age: 25
+        - client_id: "00000000-0000-0000-0000-000000000026"
+          login: "user9"
+          location: "St. Petersburg"
+          gender: "FEMALE"
+          age: 30
+    response:
+      status_code: 201
+      json:
+        - client_id: "00000000-0000-0000-0000-000000000026"
+          login: "user9"
+          location: "St. Petersburg"
+          gender: "FEMALE"
+          age: 30

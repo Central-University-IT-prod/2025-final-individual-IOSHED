@@ -1,0 +1,36 @@
+#[derive(utoipa::OpenApi)]
+#[openapi(
+    servers(
+        (url = "", description = "API Server")
+    ),
+    paths(
+        super::super::routers::healthcheck::healthcheck_handler,
+        super::super::routers::time::time_advance_handler,
+        super::super::routers::ml_score::ml_score_handler,
+        super::super::routers::ads::ads_handler,
+        super::super::routers::ads::ads_click_handler,
+        super::super::routers::stats::stat_campaign_daily_handler,
+        super::super::routers::stats::stat_campaign_handler,
+        super::super::routers::stats::stat_advertisers_daily_handler,
+        super::super::routers::stats::stat_advertisers_handler,
+        super::super::routers::client::client_bulk_handler,
+        super::super::routers::client::client_by_id_handler,
+        super::super::routers::advertisers::advertiser_bulk_handler,
+        super::super::routers::advertisers::advertiser_by_id_handler,
+        super::super::routers::moderate::moderate_config_handler,
+        super::super::routers::moderate::moderate_add_list_handler,
+        super::super::routers::moderate::moderate_get_list_handler,
+        super::super::routers::moderate::moderate_delete_list_handler,
+        super::super::routers::advertisers::campaigns::campaigns_create_handler,
+        super::super::routers::advertisers::campaigns::campaigns_generate_text_handler,
+        super::super::routers::advertisers::campaigns::campaigns_update_handler,
+        super::super::routers::advertisers::campaigns::campaigns_delete_handler,
+        super::super::routers::advertisers::campaigns::campaigns_get_by_id_handler,
+        super::super::routers::advertisers::campaigns::campaigns_get_list_handler,
+        super::super::routers::advertisers::campaigns::images::upload_image_campaign_handler,
+        super::super::routers::advertisers::campaigns::images::get_campaign_image_handler,
+        super::super::routers::advertisers::campaigns::images::get_campaign_name_images_handler,
+        super::super::routers::advertisers::campaigns::images::delete_campaign_image_handler,
+    ),
+)]
+pub struct ApiDocSwagger;
